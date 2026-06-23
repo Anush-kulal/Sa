@@ -1,33 +1,34 @@
-import React, { useState } from "react";
+import pandas as pd
 
-export default function ToDoFunction() {
-  const [tasks, setTasks] = useState([]);
-  const [task, setTask] = useState("");
-  const add = () => {
-    if (task) {
-      setTasks([...tasks, { id: Date.now(), text: task, done: false }]);
-      setTask("");
-    }
-  };
-
-  return (
-    <div style={{ textAlign: "center" }}>
-      <h2>To-Do List</h2>
-      <input value={task} onChange={(e) => setTask(e.target.value)} />
-      <button onClick={add}>Add</button>
-      <ul>
-        {tasks.map(t => (
-          <li key={t.id}>
-            <span
-              onClick={() => setTasks(tasks.map(x => x.id === t.id ? { ...x, done: !x.done } : x))}
-              style={{ textDecoration: t.done ? "line-through" : "none" }}
-            >
-              {t.text}
-            </span>
-            <button onClick={() => setTasks(tasks.filter(x => x.id !== t.id))}>X</button>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+dataset = {
+    'Sky': ['Suny', 'Suny', 'Rainy', 'Suny'],
+    'AirTemp': ['Warm', 'Cold', 'Warm', 'Warm'],
+    'Humidity': ['High', 'Normal', 'High', 'High'],
+    'Wind': ['Strong', 'Strong', 'Medium', 'Strong'],
+    'Water': ['Warm', 'Warm', 'Warm', 'Cool'],
+    'Output': ['Yes', 'Yes', 'No', 'Yes']
 }
+
+df = pd.DataFrame(dataset)
+
+def find_s(df):
+    X = df.iloc[:, :-1].values  # All rows, all columns except the last one
+    Y = df.iloc[:, -1].values   # All rows, only the last column (Yes/No)
+
+    for i in range(len(Y)):
+        if Y[i] == "Yes":
+            h = X[i].copy()    # 'h' is your specific hypothesis tracker
+            break
+
+    for i in range(len(Y)):
+        if Y[i] == "Yes":
+            for j in range(len(h)):
+                # If the feature doesn't match our current hypothesis, generalize it
+                if h[j] != X[i][j]:
+                    h[j] = "?"  # '?' means it accepts any value
+
+    return h
+
+# 3. Run and print
+result = find_s(df)
+print("Most Specific Hypothesis:", result)
