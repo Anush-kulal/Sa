@@ -1,52 +1,13 @@
-App.js
--------
-import React from 'react';
-import Header from './Header';
-import Footer from './Footer';
-import './App.css';
-
-function App() {
-  const title = "Welcome to My React App";
-  const tagline = "Building great apps with React";
-  const copyright = "© 2025 MyApp, All Rights Reserved";
-
-  return (
-    <div className="App">
-      <Header title={title} />
-      <Footer tagline={tagline} copyright={copyright} />
-    </div>
-  );
-}
-
-export default App;
-
-
-Header.js
----------
-import React from 'react';
-
-function Header(props) {
-  return (
-    <header>
-      <h1>{props.title}</h1>
-    </header>
-  );
-}
-
-export default Header;
-
-
-Footer.js
--------
-import React from 'react';
-
-function Footer(props) {
-  return (
-    <footer>
-      <p>{props.tagline}</p>
-      <p>{props.copyright}</p>
-    </footer>
-  );
-}
-
-export default Footer;
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.datasets import fetch_california_housing
+df = fetch_california_housing(as_frame=True).frame
+fig, axes = plt.subplots(2, 1, figsize=(12, 12))
+sns.heatmap(df.corr(), annot=True, fmt=".2f", cmap="coolwarm", cbar=True,
+ax=axes[0])
+axes[0].set_title("Correlation Matrix Heatmap")
+sns.pairplot(df[['MedInc', 'HouseAge', 'AveRooms', 'AveOccup', 'MedHouseVal']],
+diag_kind="kde")
+plt.subplots_adjust(hspace=0.4) # Adjust space between subplots
+plt.show()
