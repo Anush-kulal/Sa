@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
-
-export default function Counter() {
-  const [count, setCount] = useState(0);
-  const [step, setStep] = useState(1);
-
-  return (
-    <div style={{ textAlign: 'center', marginTop: '50px' }}>
-      <h1>Count: {count}</h1>
-      <input type="number" value={step} onChange={(e) => setStep(Number(e.target.value))} min="1" />
-      <button onClick={() => setCount(count + step)}>Increase</button>
-      <button onClick={() => setCount(Math.max(0, count - step))}>Decrease</button>
-      <button onClick={() => setCount(0)}>Reset</button>
-    </div>
-  );
-}
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+from sklearn.datasets import load_iris
+from sklearn.preprocessing import StandardScaler
+iris = load_iris()
+df = pd.DataFrame(iris.data, columns=iris.feature_names)
+scaler = StandardScaler()
+scaled_data = scaler.fit_transform(df)
+pca = PCA(n_components=2)
+pca_result = pca.fit_transform(scaled_data)
+pca_df = pd.DataFrame(pca_result, columns=['PC1', 'PC2'])
+plt.figure(figsize=(8, 6))
+plt.scatter(pca_df['PC1'], pca_df['PC2'], c=iris.target, cmap='viridis')
+plt.title("PCA of Iris Dataset (2 components)")
+plt.xlabel("Principal Component 1")
+plt.ylabel("Principal Component 2")
+plt.colorbar(label='Target')
+plt.show()
